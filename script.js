@@ -1,40 +1,46 @@
 /*
-    Name: Gibson
-    Class: CSE 2nd Year
-    Assignment: 5 (Crypto API Project)
-    Date: 26/11/2025
+    Subject: Web Development (Assignment 5)
+    Topic: Fetch API & Async/Await
+    Student: Gibson | CSE 2nd Year
 */
 
-// --- 1. Global Variables & Config ---
+// --- HINT: API Keys ---
+// Some APIs need a key. CoinGecko is public, but if I had a key, I would put it here.
+// Documentation says to pass it in the header or URL.
+const API_KEY = "CG-XXXXXXXX"; // (Optional Key)
 const BASE_URL = "https://api.coingecko.com/api/v3";
+
 let curr = "usd";    // Default currency
 let sign = "$";      // Default symbol
-let allData = [];    // To store API response
+let allData = [];    // Global variable to store fetched data
 let myChart = null;  // For the Chart.js graph
 
-// --- 2. Selecting DOM Elements ---
+// DOM Elements
 const homeDiv = document.getElementById("home-page");
 const detailsDiv = document.getElementById("coin-page");
 const tableBody = document.getElementById("crypto-table-body");
 const searchBox = document.getElementById("searchInput");
 const loader = document.getElementById("loader");
 
-// --- 3. Function to Fetch Data from API ---
+// --- HINT: Async/Await & Data Flow ---
+// JavaScript is single-threaded. I used 'async' and 'await' here.
+// If I didn't use 'await', the code would try to display 'data' before it arrived (undefined).
 async function fetchAllCoins() {
-    console.log("Fetching data from API..."); // Debugging
+    console.log("Fetching data... (Check Network Tab F12)"); // HINT: Network Tab debugging
 
     try {
-        // Fetching top 35 coins by market cap
-        let url = `${BASE_URL}/coins/markets?vs_currency=${curr}&order=market_cap_desc&per_page=35&page=1&sparkline=false`;
+        // Fetching top 10 coins
+        // I am passing the currency and order parameters as per API documentation
+        let url = `${BASE_URL}/coins/markets?vs_currency=${curr}&order=market_cap_desc&per_page=10&page=1&sparkline=false`;
         
+        // Waiting for the server to respond
         const res = await fetch(url);
         const data = await res.json();
         
-        // Save data to global variable
         allData = data;
-        console.log(allData); // Check if data arrived
+        console.log(allData); // Checking if data is correct
 
-        // Call function to show table
+        // Now that data is here, we update the UI
         showTable(allData);
 
     } catch (error) {
@@ -43,30 +49,30 @@ async function fetchAllCoins() {
     }
 }
 
-// --- 4. Function to Display Table Rows ---
+// --- HINT: DOM Manipulation ---
+// I am not writing HTML manually. I am using document.createElement 
+// to create rows dynamically based on the API data.
 function showTable(items) {
-    // Clear previous data
-    tableBody.innerHTML = "";
+    tableBody.innerHTML = ""; // Clear old data
 
-    // Loop through each coin
     items.forEach(coin => {
         
-        // Check if price is positive or negative (for color)
+        // Logic for Green/Red color
         let color = "green";
         if (coin.price_change_percentage_24h < 0) {
             color = "red";
         }
 
-        // Creating a new div for the row
+        // Creating the row element dynamically
         let row = document.createElement("div");
         row.className = "table-layout coin-row";
         
-        // Adding Click event to open details
+        // Interactivity: Click to open details
         row.onclick = function() {
             openDetails(coin.id);
         };
 
-        // Injecting HTML
+        // Updating innerHTML with data
         row.innerHTML = `
             <p>${coin.market_cap_rank}</p>
             <div class="card-coin-flex">
@@ -78,68 +84,65 @@ function showTable(items) {
             <p class="market-cap">${sign} ${coin.market_cap.toLocaleString()}</p>
         `;
 
+        // Appending the new element to the DOM
         tableBody.appendChild(row);
     });
 }
 
-// --- 5. Search Logic ---
+// Search Logic
 function searchHandler() {
     let text = searchBox.value.toLowerCase();
     
-    // Filter the array
+    // Filtering the array
     let filteredData = allData.filter(coin => {
         return coin.name.toLowerCase().includes(text) || coin.symbol.toLowerCase().includes(text);
     });
 
-    // Show filtered results
     showTable(filteredData);
 }
 
-// Auto-refresh table when search is cleared
+// Auto-refresh on typing
 searchBox.addEventListener("input", (e) => {
     if(e.target.value === "") {
         showTable(allData);
     }
 });
 
-// --- 6. Handle Currency Change ---
+// Currency Change
 function changeCurrency() {
     let selectBox = document.getElementById("currency-select");
     curr = selectBox.value;
 
-    // Update the symbol variable
     if(curr == "usd") sign = "$";
     else if(curr == "eur") sign = "€";
     else if(curr == "inr") sign = "₹";
 
-    // Reload data with new currency
     fetchAllCoins();
 }
 
-// --- 7. Coin Details & Chart Logic ---
+// --- Coin Details & Chart Logic ---
 async function openDetails(id) {
-    console.log("Clicked coin ID: " + id);
+    console.log("Clicked ID: " + id);
 
-    // Hide Home, Show Details
+    // Switching views
     homeDiv.classList.add("hidden");
     detailsDiv.classList.remove("hidden");
-    loader.classList.remove("hidden"); // Show spinner
+    loader.classList.remove("hidden"); 
     document.getElementById("coin-content").classList.add("hidden");
 
     try {
-        // API Call 1: Get Coin Info
+        // Fetching individual coin details
+        // Note: Using await again to prevent undefined data
         let res1 = await fetch(`${BASE_URL}/coins/${id}`);
         let data1 = await res1.json();
 
-        // API Call 2: Get Chart Data (10 days)
+        // Fetching Chart data
         let res2 = await fetch(`${BASE_URL}/coins/${id}/market_chart?vs_currency=${curr}&days=10&interval=daily`);
         let data2 = await res2.json();
 
-        // Update UI
         updateCoinInfo(data1);
         drawChart(data2.prices);
 
-        // Hide spinner, show content
         loader.classList.add("hidden");
         document.getElementById("coin-content").classList.remove("hidden");
 
@@ -148,7 +151,6 @@ async function openDetails(id) {
     }
 }
 
-// Helper to update text in Details Page
 function updateCoinInfo(info) {
     document.getElementById("detail-image").src = info.image.large;
     document.getElementById("detail-name").innerText = info.name;
@@ -160,16 +162,14 @@ function updateCoinInfo(info) {
     document.getElementById("detail-low").innerText = sign + " " + info.market_data.low_24h[curr].toLocaleString();
 }
 
-// --- 8. Chart.js Function ---
+// Chart.js Graph
 function drawChart(priceArray) {
     let ctx = document.getElementById('coinChart').getContext('2d');
 
-    // Remove old chart if exists (otherwise it glitches)
     if (myChart) {
         myChart.destroy();
     }
 
-    // Convert timestamps to readable dates
     let labels = priceArray.map(item => {
         let date = new Date(item[0]);
         return date.getDate() + "/" + (date.getMonth() + 1);
@@ -177,7 +177,6 @@ function drawChart(priceArray) {
 
     let prices = priceArray.map(item => item[1]);
 
-    // Create new Chart
     myChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -205,11 +204,9 @@ function drawChart(priceArray) {
     });
 }
 
-// Back Button Logic
 function showHome() {
     homeDiv.classList.remove("hidden");
     detailsDiv.classList.add("hidden");
 }
 
-// Run this when page loads
 fetchAllCoins();

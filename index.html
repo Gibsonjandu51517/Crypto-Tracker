@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Tracker made by Gibson</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="logo" onclick="showHome()">Crypto Tracker <span style="font-size: 0.6em; font-weight: 300;">made by Gibson</span></div>
+        <ul class="nav-links">
+            <li onclick="showHome()">Home</li>
+            <li>Features</li>
+            <li>Pricing</li>
+            <li>Blog</li>
+        </ul>
+        <div class="nav-right">
+            <select id="currency-select" onchange="changeCurrency()">
+                <option value="usd">USD</option>
+                <option value="inr">INR</option>
+                <option value="eur">EUR</option>
+            </select>
+            <button class="btn-signup">Sign up <span style="margin-left:5px">↗</span></button>
+        </div>
+    </nav>
+    <div id="home-page">
+        <header class="hero">
+            <h1>Largest <br> Crypto Marketplace</h1>
+            <p>Welcome to the world's largest cryptocurrency marketplace.<br>Sign up to explore more about cryptos.</p>
+            <div class="search-form">
+                <input type="text" id="searchInput" placeholder="Search crypto..." required>
+                <button type="button" onclick="searchHandler()">Search</button>
+            </div>
+        </header>
+        <div class="table-container">
+            <div class="table-layout header">
+                <p>#</p>
+                <p>Coins</p>
+                <p>Price</p>
+                <p style="text-align: center;">24H Change</p>
+                <p class="market-cap">Market Cap</p>
+            </div>
+            <div id="crypto-table-body"></div>
+        </div>
+    </div>
+    <div id="coin-page" class="hidden">
+        <div id="loader" class="loader hidden"></div>
+        <div id="coin-content">
+            <div class="coin-name-section">
+                <img id="detail-image" src="" alt="coin">
+                <h2 id="detail-name">Bitcoin</h2>
+                <span id="detail-symbol">(BTC)</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="coinChart"></canvas>
+            </div>
+            <div class="coin-info-list">
+                <ul>
+                    <li>Crypto Market Rank <span id="detail-rank">1</span></li>
+                    <li>Current Price <span id="detail-price">$50,000</span></li>
+                    <li>Market Cap <span id="detail-market-cap">$1T</span></li>
+                    <li>24 Hour High <span id="detail-high">$51,000</span></li>
+                    <li>24 Hour Low <span id="detail-low">$49,000</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<footer class="footer">
+        <p>Copyright @ 2025, Crypto Tracker made by Gibson - All Right Reserved.</p>    </footer>
+   <script src="script.js"></script>
+</body>
+</html>

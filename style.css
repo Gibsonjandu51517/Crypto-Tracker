@@ -1,0 +1,223 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(#0b004e, #1d1536);
+    color: white;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* Navbar */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10%;
+    border-bottom: 1px solid #3c3c3c;
+    color: #ddd;
+}
+
+.logo {
+    font-size: 20px; 
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap; 
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 40px;
+}
+
+.nav-links li { cursor: pointer; }
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+select {
+    padding: 5px 8px;
+    border-radius: 5px;
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+select option { background-color: #0b004e; }
+
+.btn-signup {
+    padding: 10px 20px;
+    background: white;
+    color: #222;
+    border: none;
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    margin: 80px auto;
+    max-width: 600px;
+}
+
+.hero h1 {
+    font-size: 60px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    color: #e3e3e3;
+    margin-bottom: 30px;
+}
+
+/* Search Box */
+.search-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-radius: 5px;
+    padding: 5px;
+    width: 80%;
+    margin: auto;
+}
+
+.search-form input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding-left: 10px;
+    font-size: 16px;
+}
+
+.search-form button {
+    background: #7927ff;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Table */
+.table-container {
+    max-width: 800px;
+    margin: auto;
+    background: linear-gradient(rgba(84,3,255,0.15), rgba(105,2,153,0.15));
+    border-radius: 15px;
+    margin-bottom: 50px;
+}
+
+.table-layout {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 1fr 1fr 1.5fr;
+    padding: 15px 20px;
+    align-items: center;
+    border-bottom: 1px solid #3c3c3c;
+}
+
+.table-layout.header {
+    border-bottom: 1px solid #fff;
+    font-weight: 600;
+}
+
+.table-layout:last-child { border-bottom: none; }
+
+.market-cap { text-align: right; }
+
+.coin-row { cursor: pointer; transition: 0.2s; }
+.coin-row:hover { background-color: rgba(255,255,255,0.05); }
+
+.card-coin-flex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-coin-flex img { width: 35px; }
+
+.green { color: #00ff59; text-align: center; }
+.red { color: #ff3333; text-align: center; }
+
+/* COIN DETAIL PAGE CSS */
+.hidden { display: none; }
+
+#coin-page {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.coin-name-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 50px;
+}
+
+.coin-name-section img { width: 80px; margin-bottom: 10px; }
+.coin-name-section h2 { font-size: 40px; }
+.coin-name-section span { font-size: 20px; color: #aaa; }
+
+.chart-container {
+    height: 400px;
+    margin-bottom: 50px;
+}
+
+.coin-info-list ul {
+    list-style: none;
+    border-bottom: 1px solid #555;
+}
+
+.coin-info-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-top: 1px solid #555;
+    font-size: 15px;
+}
+
+.coin-info-list span { font-weight: 600; }
+
+.footer {
+    text-align: center;
+    border-top: 1px solid #333;
+    padding: 20px;
+    font-size: 14px;
+    margin-top: 50px;
+}
+
+/* Spinner */
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #7927ff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 100px auto;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Mobile Response */
+@media (max-width: 700px) {
+    .table-layout { grid-template-columns: 0.5fr 3fr 1fr 1fr; }
+    .market-cap { display: none; }
+    .nav-links { display: none; }
+}
